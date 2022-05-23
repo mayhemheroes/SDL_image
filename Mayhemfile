@@ -1,9 +1,9 @@
-image: ghcr.io/capuanob/xml-c-fuzz:latest
-project: xml-c
-target: xml-fuzzer
+image: ghcr.io/capuanob/sdlimage-fuzz:latest
+project: sdl_image
+target: sdlimage-fuzzer
 tests:
   - file://fuzz/corpus
 
 cmds:
-  - cmd: /xml-fuzzer -close_fd_mask=2
+  - cmd: /sdl-fuzz -close_fd_mask=2
     libfuzzer: true
