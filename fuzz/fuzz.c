@@ -19,7 +19,7 @@ int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     SDL_FreeSurface(surface);
 
     if (src)
-        SDL_Rwclose(src);
+        SDL_RWclose(src);
 
     return 0;
 }
