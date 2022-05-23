@@ -1,9 +1,10 @@
 image: ghcr.io/capuanob/sdlimage-fuzz:latest
-project: sdl_image
+project: sdlimage
 target: sdlimage-fuzzer
 tests:
   - file://fuzz/corpus
 
 cmds:
   - cmd: /sdl-fuzz -close_fd_mask=2
+    max_length: 100000
     libfuzzer: true
