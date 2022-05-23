@@ -3,6 +3,9 @@
 #include <string.h> //memcpy
 
 int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+    if (size < 1)
+        return 0;
+
     // Create a new buffer of non-const fuzzer data
     uint8_t fuzz_data[size];
     memcpy(fuzz_data, data, size);
