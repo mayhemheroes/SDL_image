@@ -1,0 +1,9 @@
+image: ghcr.io/capuanob/xml-c-fuzz:latest
+project: xml-c
+target: xml-fuzzer
+tests:
+  - file://fuzz/corpus
+
+cmds:
+  - cmd: /xml-fuzzer -close_fd_mask=2
+    libfuzzer: true
