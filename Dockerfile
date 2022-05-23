@@ -3,7 +3,7 @@ FROM --platform=linux/amd64 ubuntu:20.04 as builder
 
 ## Install build dependencies.
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y git clang make libsdl2-dev python3 pip
+    DEBIAN_FRONTEND=noninteractive apt-get install -y git clang make libsdl1.2-dev libsdl2-dev python3 pip libavifile-0.7-dev
 RUN pip install cmake --upgrade
 
 ## Add source code to the build stage.
@@ -15,14 +15,17 @@ WORKDIR SDL_image
 RUN git checkout mayhem
 WORKDIR /SDL
 
+## Install extensions
+RUN ./SDL_image/external/download.sh
+
 ## Build
 RUN mkdir build
 WORKDIR build
-RUN CC=clang CXX=clang++ cmake -DSDL2IMAGE_FUZZ=1 ../SDL_image/
+RUN CC=clang CXX=clang++ cmake -DSDL2IMAGE_FUZZ=1 -DSDL2IMAGE_AVIF=1 -DSDL2IMAGE_JXL=1 -DSDL2IMAGE_TIF=1 -DSDL2IMAGE_WEBP=1 ../SDL_image/
 RUN make -j$(nproc)
 
 ## Create symbolic links
-RUN ln -s /SDL/build/fuzz-sdl-fuzz /sdl-fuzz
+RUN ln -s /SDL/build/fuzz/sdl-fuzz /sdl-fuzz
 RUN ln -s /SDL/SDL_image/fuzz/corpus /corpus
 
 ## Set up fuzzing!
