@@ -46,6 +46,7 @@ include(GNUInstallDirs)
 option(CMAKE_POSITION_INDEPENDENT_CODE "Build static libraries with -fPIC" ON)
 option(BUILD_SHARED_LIBS "Build the library as a shared library" ON)
 
+option(SDL2IMAGE_FUZZ "Build project's fuzzer" OFF)
 option(SDL2IMAGE_INSTALL "Enable SDL2_image install target" ON)
 option(SDL2IMAGE_DEPS_SHARED "Load dependencies dynamically" ON)
 option(SDL2IMAGE_VENDORED "Use vendored third-party libraries" ${vendored_default})
@@ -202,6 +203,12 @@ target_compile_definitions(SDL2_image PRIVATE
     SDL_BUILD_MICRO_VERSION=${MICRO_VERSION}
 )
 target_link_libraries(SDL2_image PRIVATE ${sdl2_target_name})
+
+# Want to add sanitization flags to linker and compiler
+if(SDL2IMAGE_FUZZ)
+    target_compile_options(SDL2_image PUBLIC -fsanitize=fuzzer-no-link)
+    target_link_options(SDL2_image PUBLIC -fsanitize=fuzzer-no-link)
+endif()
 if(WIN32 AND SDL2IMAGE_BUILD_SHARED_LIBS)
     target_sources(SDL2_image PRIVATE
         version.rc
@@ -726,6 +733,9 @@ if(SDL2IMAGE_SAMPLES)
             target_link_libraries(${prog} PRIVATE mingw32)
             target_link_options(${prog} PRIVATE -mwindows)
         endif()
+        if (SDL2IMAGE_FUZZ)
+            target_compile_options(${prog} PRIVATE -fsanitize=fuzzer-no-link)
+        endif()
         target_link_libraries(${prog} PRIVATE SDL2_image::${sdl2_image_export_name})
         if(TARGET SDL2::SDL2main)
             target_link_libraries(${prog} PRIVATE SDL2::SDL2main)
@@ -747,6 +757,13 @@ set_target_properties(SDL2::image PROPERTIES
 )
 
 if(SDL2IMAGE_TESTS)
+    target_compile_options(SDl2::image PUBLIC -fsanitize=fuzzer)
     enable_testing()
     add_subdirectory(test)
+endif()
+
+# Build fuzzer executable
+if(SDL2IMAGE_FUZZ)
+    message(STATUS "Building fuzzer...")
+    add_subdirectory(fuzz)
 endif()
