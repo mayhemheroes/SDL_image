@@ -9,9 +9,17 @@ int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
     // Convert fuzzer data to an instance of SDL_RWops
     SDL_RWops* src = SDL_RWFromMem(fuzz_data, size);
+    if (!src) // Unable to create a RWops instance
+        return 0;
 
     // Call target to convert our fuzzer input into an SDL surface
-    IMG_Load_RW(src, 1);
+    SDL_Surface* surface = IMG_Load_RW(src, 1);
+
+    // Cleanup
+    SDL_FreeSurface(surface);
+
+    if (src)
+        SDL_Rwclose(src);
 
     return 0;
 }
