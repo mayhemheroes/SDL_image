@@ -3,7 +3,7 @@ FROM --platform=linux/amd64 ubuntu:20.04 as builder
 
 ## Install build dependencies.
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y git clang make libsdl1.2-dev libsdl2-dev python3 pip libavifile-0.7-dev
+    DEBIAN_FRONTEND=noninteractive apt-get install -y git clang make libsdl1.2-dev libsdl2-dev python3 pip
 RUN pip install cmake --upgrade
 
 ## Add source code to the build stage.
@@ -16,12 +16,23 @@ RUN git checkout mayhem
 WORKDIR /SDL
 
 ## Install extensions
+WORKDIR /SDL
 RUN ./SDL_image/external/download.sh
 
-## Build
+## Install AVIF manually, as vendored support isn't yet available
+WORKDIR /
+RUN git clone https://github.com/AOMediaCodec/libavif.git
+WORKDIR /libavif
 RUN mkdir build
 WORKDIR build
-RUN CC=clang CXX=clang++ cmake -DSDL2IMAGE_FUZZ=1 -DSDL2IMAGE_AVIF=1 -DSDL2IMAGE_JXL=1 -DSDL2IMAGE_TIF=1 -DSDL2IMAGE_WEBP=1 ../SDL_image/
+RUN cmake .. && make -j$(nproc) && make install && ldconfig
+
+## Build
+WORKDIR /SDL
+RUN mkdir build
+WORKDIR build
+RUN CC=clang CXX=clang++ cmake -DSDL2IMAGE_FUZZ=1 -DSDL2IMAGE_JXL=1 -DSDL2IMAGE_TIF=1 \
+    -DSDL2IMAGE_WEBP=1 -DSDL2IMAGE_VENDORED=1 ../SDL_image/
 RUN make -j$(nproc)
 
 ## Create symbolic links
