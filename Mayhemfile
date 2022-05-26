@@ -1,5 +1,5 @@
 image: ghcr.io/capuanob/sdlimage-fuzz:latest
-project: sdlimage
+project: sdl-image
 target: sdlimage-fuzzer
 tests:
   - file://fuzz/corpus
