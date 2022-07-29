@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-add_executable(sdl-fuzz fuzz.c)
+add_executable(sdl-fuzz fuzz_img_load.c)
 
 ## Uncomment these lines after converting fuzzme.c into a libFuzzer target
 if (NOT CMAKE_C_COMPILER_ID STREQUAL "Clang")

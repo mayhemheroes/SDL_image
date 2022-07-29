@@ -10,9 +10,8 @@ RUN pip install cmake --upgrade
 WORKDIR /
 RUN mkdir SDL
 WORKDIR /SDL
-RUN git clone https://github.com/capuanob/SDL_image.git
+ADD . SDL_image
 WORKDIR SDL_image
-RUN git checkout mayhem
 WORKDIR /SDL
 
 ## Install extensions
@@ -35,10 +34,15 @@ RUN CC=clang CXX=clang++ cmake -DSDL2IMAGE_FUZZ=1 -DSDL2IMAGE_JXL=1 -DSDL2IMAGE_
     -DSDL2IMAGE_WEBP=1 -DSDL2IMAGE_VENDORED=1 ../SDL_image/
 RUN make -j$(nproc)
 
-## Create symbolic links
-RUN ln -s /SDL/build/fuzz/sdl-fuzz /sdl-fuzz
-RUN ln -s /SDL/SDL_image/fuzz/corpus /corpus
+## Package Stage
+FROM --platform=linux/amd64 ubuntu:20.04 as packager
+COPY --from=builder /SDL/build/fuzz/sdl-fuzz /sdl-fuzz
+COPY --from=builder /SDL/build/libSDL2_image-2.0.so.0 /usr/lib
+
+RUN apt-get update && \
+	DEBIAN_FRONTEND=noninteractive apt-get install -y libsdl1.2debian libsdl2-2.0-0
+RUN mkdir -p /corpus && echo seed > /corpus/seed
 
 ## Set up fuzzing!
 ENTRYPOINT []
-CMD /sdl-fuzz /corpus -close_fd_mask=2
+CMD /sdl-fuzz /corpus
