@@ -45,8 +45,6 @@ EXTRA_DIST = \
 	Android.mk		\
 	CHANGES.txt 		\
 	CMakeLists.txt		\
-	cmake			\
-	SDL2_imageConfig.cmake.in \
 	IMG_ImageIO.m		\
 	IMG_xxx.c		\
 	LICENSE.txt 		\
@@ -54,11 +52,14 @@ EXTRA_DIST = \
 	README-emscripten.txt 	\
 	README.txt 		\
 	SDL2_image.spec		\
+	SDL2_imageConfig.cmake.in \
 	VisualC			\
 	VisualC-WinRT		\
 	Xcode			\
 	autogen.sh		\
+	cmake			\
 	external		\
+	mingw			\
 	version.rc
 
 
@@ -97,3 +98,13 @@ rpm: $(PACKAGE)-$(VERSION).tar.gz
 
 dist-hook:
 	ls $(distdir)/external | fgrep -v download.sh | while read dir; do rm -rf "$(distdir)/external/$$dir"; done
+
+install-data-local:
+	$(MKDIR_P) $(DESTDIR)$(libdir)/cmake/SDL2_image
+	$(INSTALL) -m 644 sdl2_image-config.cmake $(DESTDIR)$(libdir)/cmake/SDL2_image
+	$(INSTALL) -m 644 sdl2_image-config-version.cmake $(DESTDIR)$(libdir)/cmake/SDL2_image
+
+uninstall-hook:
+	rm $(DESTDIR)$(libdir)/cmake/SDL2_image/sdl2_image-config.cmake
+	rm $(DESTDIR)$(libdir)/cmake/SDL2_image/sdl2_image-config-version.cmake
+	rm -r $(DESTDIR)$(libdir)/cmake/SDL2_image

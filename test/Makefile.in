@@ -164,8 +164,9 @@ am__can_run_installinfo = \
   esac
 am__dist_testexec_DATA_DIST = palette.bmp palette.gif sample.avif \
 	sample.bmp sample.cur sample.ico sample.jpg sample.jxl \
-	sample.png sample.pnm sample.qoi sample.tif sample.webp \
-	sample.xcf sample.xpm svg.bmp svg.svg svg64.bmp
+	sample.pcx sample.png sample.pnm sample.qoi sample.tga \
+	sample.tif sample.webp sample.xcf sample.xpm svg-class.bmp \
+	svg-class.svg svg.bmp svg.svg svg64.bmp
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -390,7 +391,7 @@ TEST_LOG_DRIVER = $(SHELL) $(top_srcdir)/test-driver
 TEST_LOG_COMPILE = $(TEST_LOG_COMPILER) $(AM_TEST_LOG_FLAGS) \
 	$(TEST_LOG_FLAGS)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp \
-	$(top_srcdir)/test-driver
+	$(top_srcdir)/test-driver README.md
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -404,7 +405,6 @@ AWK = @AWK@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CSCOPE = @CSCOPE@
 CTAGS = @CTAGS@
@@ -447,6 +447,23 @@ LIBWEBP_CFLAGS = @LIBWEBP_CFLAGS@
 LIBWEBP_LIBS = @LIBWEBP_LIBS@
 LIPO = @LIPO@
 LN_S = @LN_S@
+LOAD_AVIF = @LOAD_AVIF@
+LOAD_BMP = @LOAD_BMP@
+LOAD_GIF = @LOAD_GIF@
+LOAD_JPG = @LOAD_JPG@
+LOAD_JXL = @LOAD_JXL@
+LOAD_LBM = @LOAD_LBM@
+LOAD_PCX = @LOAD_PCX@
+LOAD_PNG = @LOAD_PNG@
+LOAD_PNM = @LOAD_PNM@
+LOAD_QOI = @LOAD_QOI@
+LOAD_SVG = @LOAD_SVG@
+LOAD_TGA = @LOAD_TGA@
+LOAD_TIF = @LOAD_TIF@
+LOAD_WEBP = @LOAD_WEBP@
+LOAD_XCF = @LOAD_XCF@
+LOAD_XPM = @LOAD_XPM@
+LOAD_XV = @LOAD_XV@
 LTLIBOBJS = @LTLIBOBJS@
 LT_AGE = @LT_AGE@
 LT_CURRENT = @LT_CURRENT@
@@ -482,6 +499,8 @@ PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 RANLIB = @RANLIB@
 RC = @RC@
+SDL2IMAGE_JPG_SAVE = @SDL2IMAGE_JPG_SAVE@
+SDL2IMAGE_PNG_SAVE = @SDL2IMAGE_PNG_SAVE@
 SDL2_CONFIG = @SDL2_CONFIG@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_LIBS = @SDL_LIBS@
@@ -490,6 +509,9 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
+USE_IMAGEIO = @USE_IMAGEIO@
+USE_STBIMAGE = @USE_STBIMAGE@
+USE_WIC = @USE_WIC@
 VERSION = @VERSION@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -510,6 +532,7 @@ build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
 builddir = @builddir@
+cmake_prefix_relpath = @cmake_prefix_relpath@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
@@ -577,13 +600,17 @@ EXTRA_DIST = \
 @INSTALL_TESTS_TRUE@	sample.ico \
 @INSTALL_TESTS_TRUE@	sample.jpg \
 @INSTALL_TESTS_TRUE@	sample.jxl \
+@INSTALL_TESTS_TRUE@	sample.pcx \
 @INSTALL_TESTS_TRUE@	sample.png \
 @INSTALL_TESTS_TRUE@	sample.pnm \
 @INSTALL_TESTS_TRUE@	sample.qoi \
+@INSTALL_TESTS_TRUE@	sample.tga \
 @INSTALL_TESTS_TRUE@	sample.tif \
 @INSTALL_TESTS_TRUE@	sample.webp \
 @INSTALL_TESTS_TRUE@	sample.xcf \
 @INSTALL_TESTS_TRUE@	sample.xpm \
+@INSTALL_TESTS_TRUE@	svg-class.bmp \
+@INSTALL_TESTS_TRUE@	svg-class.svg \
 @INSTALL_TESTS_TRUE@	svg.bmp \
 @INSTALL_TESTS_TRUE@	svg.svg \
 @INSTALL_TESTS_TRUE@	svg64.bmp \

@@ -18,6 +18,8 @@
         `FILEVERSION`, `PRODUCTVERSION`, `FileVersion`, `ProductVersion`
     * `VisualC/Version.rc`:
         `FILEVERSION`, `PRODUCTVERSION`, `FileVersion`, `ProductVersion`
+    * `Xcode/Info-Framework.plist`:
+        `CFBundleShortVersionString`, `CFBundleVersion`
 
 * Bump ABI version information
 
@@ -74,6 +76,8 @@
     * Assume that the next feature release will contain new API/ABI
 
 * Run test/versioning.sh to verify that everything is consistent
+
+* Add a new milestone for issues
 
 ## New development prerelease
 

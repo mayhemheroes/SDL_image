@@ -1,3 +1,6 @@
+find_package(SDL2main)
+find_package(SDL2test REQUIRED)
+
 add_executable(testimage main.c)
 
 set(ALL_TESTS
@@ -12,13 +15,17 @@ set(RESOURCE_FILES
     sample.ico
     sample.jpg
     sample.jxl
+    sample.pcx
     sample.png
     sample.pnm
     sample.qoi
+    sample.tga
     sample.tif
     sample.webp
     sample.xcf
     sample.xpm
+    svg-class.bmp
+    svg-class.svg
     svg.bmp
     svg.svg
     svg64.bmp
@@ -36,7 +43,7 @@ foreach(prog ${ALL_TESTS})
     if(TARGET SDL2::SDL2main)
         target_link_libraries(${prog} PRIVATE SDL2::SDL2main)
     endif()
-    target_link_libraries(${prog} PRIVATE SDL2_test ${sdl2_target_name})
+    target_link_libraries(${prog} PRIVATE SDL2::SDL2test ${sdl2_target_name})
 
     add_test(
         NAME ${prog}

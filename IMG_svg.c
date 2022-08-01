@@ -27,6 +27,14 @@
 
 #ifdef LOAD_SVG
 
+#if !SDL_VERSION_ATLEAST(2, 0, 16)
+/* SDL_roundf() is available starting with 2.0.16 */
+static float SDLCALL SDL_roundf(float x)
+{
+    return (x >= 0.0f) ? SDL_floorf(x + 0.5f) : SDL_ceilf(x - 0.5f);
+}
+#endif /* SDL 2.0.16 */
+
 /* Replace C runtime functions with SDL C runtime functions for building on Windows */
 #define free    SDL_free
 #define malloc  SDL_malloc
@@ -63,6 +71,7 @@
 #define sqrt    SDL_sqrt
 #define sqrtf   SDL_sqrtf
 #define tanf    SDL_tanf
+#define roundf  SDL_roundf
 #ifndef FLT_MAX
 #define FLT_MAX     3.402823466e+38F
 #endif
@@ -137,14 +146,12 @@ SDL_Surface *IMG_LoadSizedSVG_RW(SDL_RWops *src, int width, int height)
         scale = 1.0f;
     }
 
-    surface = SDL_CreateRGBSurface(SDL_SWSURFACE,
-                                   (int)SDL_ceilf(image->width * scale),
-                                   (int)SDL_ceilf(image->height * scale),
-                                   32,
-                                   0x000000FF,
-                                   0x0000FF00,
-                                   0x00FF0000,
-                                   0xFF000000);
+    surface = SDL_CreateRGBSurfaceWithFormat(0,
+                                             (int)SDL_ceilf(image->width * scale),
+                                             (int)SDL_ceilf(image->height * scale),
+                                             32,
+                                             SDL_PIXELFORMAT_RGBA32);
+
     if (!surface) {
         nsvgDeleteRasterizer(rasterizer);
         nsvgDelete(image);

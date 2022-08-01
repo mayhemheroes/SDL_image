@@ -40,13 +40,17 @@ dist_testexec_DATA = \
 	sample.ico \
 	sample.jpg \
 	sample.jxl \
+	sample.pcx \
 	sample.png \
 	sample.pnm \
 	sample.qoi \
+	sample.tga \
 	sample.tif \
 	sample.webp \
 	sample.xcf \
 	sample.xpm \
+	svg-class.bmp \
+	svg-class.svg \
 	svg.bmp \
 	svg.svg \
 	svg64.bmp \
