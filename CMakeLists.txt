@@ -54,6 +54,7 @@ option(BUILD_SHARED_LIBS "Build the library as a shared library" ON)
 
 option(SDL2IMAGE_FUZZ "Build project's fuzzer" OFF)
 option(SDL2IMAGE_INSTALL "Enable SDL2_image install target" ${SDL2IMAGE_ROOTPROJECT})
+option(SDL2IMAGE_FUZZ "Build project's fuzzer" OFF)
 option(SDL2IMAGE_DEPS_SHARED "Load dependencies dynamically" ON)
 option(SDL2IMAGE_VENDORED "Use vendored third-party libraries" ${vendored_default})
 
