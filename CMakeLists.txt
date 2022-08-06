@@ -220,9 +220,10 @@ target_link_libraries(SDL2_image PRIVATE $<BUILD_INTERFACE:${sdl2_target_name}>)
 
 # Want to add sanitization flags to linker and compiler
 if(SDL2IMAGE_FUZZ)
-    target_compile_options(SDL2_image PUBLIC -fsanitize=fuzzer-no-link)
-    target_link_options(SDL2_image PUBLIC -fsanitize=fuzzer-no-link)
+    add_compile_options(-fsanitize=fuzzer-no-link)
+    add_link_options(-fsanitize=fuzzer-no-link)
 endif()
+
 if(WIN32 AND SDL2IMAGE_BUILD_SHARED_LIBS)
     target_sources(SDL2_image PRIVATE
         version.rc
@@ -770,9 +771,6 @@ if(SDL2IMAGE_SAMPLES)
             target_link_libraries(${prog} PRIVATE mingw32)
             target_link_options(${prog} PRIVATE -mwindows)
         endif()
-        if (SDL2IMAGE_FUZZ)
-            target_compile_options(${prog} PRIVATE -fsanitize=fuzzer-no-link)
-        endif()
         target_link_libraries(${prog} PRIVATE SDL2_image::${sdl2_image_export_name})
         if(TARGET SDL2::SDL2main)
             target_link_libraries(${prog} PRIVATE SDL2::SDL2main)
@@ -798,7 +796,6 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.17")
 endif()
 
 if(SDL2IMAGE_TESTS)
-    target_compile_options(SDl2::image PUBLIC -fsanitize=fuzzer)
     enable_testing()
     add_subdirectory(test)
 endif()
