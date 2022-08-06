@@ -4,6 +4,6 @@ testsuite:
   - file://fuzz/corpus
 
 cmds:
-  - cmd: /sdl-fuzz 
+  - cmd: /sdl-fuzz /corpus
     max_length: 100000
     libfuzzer: true
