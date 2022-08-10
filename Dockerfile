@@ -18,14 +18,6 @@ WORKDIR /SDL
 WORKDIR /SDL
 RUN ./SDL_image/external/download.sh
 
-## Install AVIF manually, as vendored support isn't yet available
-WORKDIR /
-RUN git clone https://github.com/AOMediaCodec/libavif.git
-WORKDIR /libavif
-RUN mkdir build
-WORKDIR build
-RUN cmake .. && make -j$(nproc) && make install && ldconfig
-
 ## Build
 WORKDIR /SDL
 RUN mkdir build
