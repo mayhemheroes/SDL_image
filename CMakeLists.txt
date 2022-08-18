@@ -216,7 +216,14 @@ target_compile_definitions(SDL2_image PRIVATE
     SDL_BUILD_MINOR_VERSION=${MINOR_VERSION}
     SDL_BUILD_MICRO_VERSION=${MICRO_VERSION}
 )
-target_link_libraries(SDL2_image PRIVATE $<BUILD_INTERFACE:${sdl2_target_name}>)
+target_link_libraries(SDL2_image PRIVATE ${sdl2_target_name})
+
+# Want to add sanitization flags to linker and compiler
+if(SDL2IMAGE_FUZZ)
+    add_compile_options(-fsanitize=fuzzer-no-link)
+    add_link_options(-fsanitize=fuzzer-no-link)
+endif()
+
 if(WIN32 AND SDL2IMAGE_BUILD_SHARED_LIBS)
     target_sources(SDL2_image PRIVATE
         version.rc
@@ -813,4 +820,10 @@ endif()
 if(SDL2IMAGE_TESTS)
     enable_testing()
     add_subdirectory(test)
+endif()
+
+# Build fuzzer executable
+if(SDL2IMAGE_FUZZ)
+    message(STATUS "Building fuzzer...")
+    add_subdirectory(fuzz)
 endif()
