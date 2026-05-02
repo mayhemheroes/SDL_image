@@ -1,0 +1,9 @@
+project: sdl-image
+target: sdlimage-fuzzer
+testsuite:
+  - file://fuzz/corpus
+
+cmds:
+  - cmd: /sdl-fuzz /corpus
+    max_length: 100000
+    libfuzzer: true
