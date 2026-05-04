@@ -2,8 +2,11 @@
 FROM --platform=linux/amd64 ubuntu:22.04 as builder
 
 ## Install build dependencies.
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y git clang make libsdl2-dev python3 python3-pip cmake
+RUN for i in 1 2 3 4 5; do \
+      apt-get update --fix-missing && \
+      DEBIAN_FRONTEND=noninteractive apt-get install -y --fix-missing git clang make libsdl2-dev python3 python3-pip cmake && break || \
+      { echo "Attempt $i failed, retrying..."; sleep 15; }; \
+    done
 RUN pip3 install cmake --upgrade
 
 ## Add source code to the build stage.
@@ -31,8 +34,11 @@ FROM --platform=linux/amd64 ubuntu:22.04 as packager
 COPY --from=builder /SDL/build/fuzz/sdl-fuzz /sdl-fuzz
 COPY --from=builder /SDL/build/libSDL2_image-2.0.so.0 /usr/lib
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y libsdl2-2.0-0
+RUN for i in 1 2 3 4 5; do \
+      apt-get update --fix-missing && \
+      DEBIAN_FRONTEND=noninteractive apt-get install -y --fix-missing libsdl2-2.0-0 && break || \
+      { echo "Attempt $i failed, retrying..."; sleep 15; }; \
+    done
 RUN mkdir -p /corpus && echo seed > /corpus/seed
 
 ## Set up fuzzing!
